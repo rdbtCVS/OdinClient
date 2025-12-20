@@ -1,0 +1,36 @@
+[versions]
+loom = "1.14-SNAPSHOT"
+fletchingTable = "0.1.0-alpha.22"
+ksp = "2.2.21-2.0.4"
+kotlin = "2.2.21"
+
+devauth = "1.2.1"
+commodore = "1.0.1"
+
+fabric-loader = "0.17.3"
+fabric-language-kotlin = "1.13.7+kotlin.2.2.21"
+
+fabric-api-1-21-8 = "0.136.1+1.21.8"
+fabric-api-1-21-10 = "0.138.3+1.21.10"
+
+odin-1-21-8 = "0.0.5"
+odin-1-21-10 = "1.21.10-test-SNAPSHOT"
+
+[libraries]
+fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-loader" }
+fabric-language-kotlin = { module = "net.fabricmc:fabric-language-kotlin", version.ref = "fabric-language-kotlin" }
+
+devauth = { module = "me.djtheredstoner:DevAuth-fabric", version.ref = "devauth" }
+commodore = { module = "com.github.stivais:Commodore", version.ref = "commodore" }
+
+odin-1-21-8 = { module = "com.github.odtheking:odinfabric", version.ref = "odin-1-21-8" }
+odin-1-21-10 = { module = "com.github.sivthepolarfox:OdinFabric", version.ref = "odin-1-21-10" }
+
+fabric-api-1-21-8 = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api-1-21-8" }
+fabric-api-1-21-10 = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api-1-21-10" }
+
+[plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+loom = { id = "fabric-loom", version.ref = "loom" }
+fletchingTable = { id = "dev.kikugie.fletching-table.fabric", version.ref = "fletchingTable" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
