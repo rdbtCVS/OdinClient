@@ -6,7 +6,7 @@ plugins {
 stonecutter active "1.21.8"
 
 stonecutter parameters {
-    swaps["mod_version"] = "\"" + property("mod.version") + "\";"
+    swaps["mod_version"] = "\"" + property("mod.version") + "\""
     swaps["mod_id"] = "\"" + property("mod.id") + "\""
-    swaps["minecraft"] = "\"" + node.metadata.version + "\";"
+    swaps["minecraft"] = "\"" + node.metadata.version + "\""
 }
