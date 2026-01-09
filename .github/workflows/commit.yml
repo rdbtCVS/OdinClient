@@ -1,0 +1,49 @@
+name: Commit Notification
+on:
+  push:
+    branches:
+      - master
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      
+      - name: Build and Notify
+        env:
+          TOKEN: ${{ secrets.TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          COMMITS='${{ toJson(github.event.commits) }}'
+          
+          TOTAL_FILES=0
+          TOTAL_ADDITIONS=0
+          TOTAL_DELETIONS=0
+          
+          COMMIT_LIST=$(echo "$COMMITS" | jq -r '.[] | "│  └─ " + (.message | split("\n")[0]) + " [" + (.id[:7]) + "]"')
+          AUTHOR_LIST=$(echo "$COMMITS" | jq -r '.[] | "│  └─ " + .author.name' | sort -u)
+          
+          for SHA in $(echo "$COMMITS" | jq -r '.[].id'); do
+            FILES=$(git diff --name-only $SHA^..$SHA 2>/dev/null | wc -l || echo 0)
+            ADDS=$(git diff --shortstat $SHA^..$SHA 2>/dev/null | grep -oP '\d+(?= insertion)' || echo 0)
+            DELS=$(git diff --shortstat $SHA^..$SHA 2>/dev/null | grep -oP '\d+(?= deletion)' || echo 0)
+            
+            TOTAL_FILES=$((TOTAL_FILES + FILES))
+            TOTAL_ADDITIONS=$((TOTAL_ADDITIONS + ADDS))
+            TOTAL_DELETIONS=$((TOTAL_DELETIONS + DELS))
+          done
+          
+          curl -X POST https://athen.skies-starred.workers.dev/ping/commit \
+            -H "Content-Type: application/json" \
+            -H "Authorization: $TOKEN" \
+            -d "{
+              \"repo\": \"$REPO\",
+              \"commits\": $(echo "$COMMIT_LIST" | jq -Rs .),
+              \"authors\": $(echo "$AUTHOR_LIST" | jq -Rs .),
+              \"files_changed\": $TOTAL_FILES,
+              \"additions\": $TOTAL_ADDITIONS,
+              \"deletions\": $TOTAL_DELETIONS
+            }"
