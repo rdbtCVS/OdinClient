@@ -1,17 +1,17 @@
 package starred.skies.odin.features.impl.cheats
 
 import com.odtheking.odin.clickgui.settings.impl.BooleanSetting
-import com.odtheking.odin.events.BlockUpdateEvent
-import com.odtheking.odin.events.RenderEvent
-import com.odtheking.odin.events.WorldLoadEvent
+import com.odtheking.odin.events.*
 import com.odtheking.odin.events.core.on
 import com.odtheking.odin.events.core.onReceive
 import com.odtheking.odin.features.Module
 import com.odtheking.odin.utils.Color
 import com.odtheking.odin.utils.Colors
+import com.odtheking.odin.utils.addVec
 import com.odtheking.odin.utils.handlers.schedule
 import com.odtheking.odin.utils.modMessage
 import com.odtheking.odin.utils.render.drawWireFrameBox
+import com.odtheking.odin.utils.render.textDim
 import com.odtheking.odin.utils.skyblock.dungeon.DungeonUtils
 import net.minecraft.core.BlockPos
 import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket
@@ -19,6 +19,7 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import starred.skies.odin.utils.Skit
+import starred.skies.odin.utils.drawTracer
 
 object LividSolver : Module(
     name = "Livid Solver (C)",
@@ -26,10 +27,30 @@ object LividSolver : Module(
     category = Skit.CHEATS
 ) {
     private val depthCheck by BooleanSetting("Depth Check", false, desc = "Disable to enable ESP")
+    private val tracer by BooleanSetting("Tracer", true, desc = "Displays a tracer to the livid") // mi0 c:
     private val woolLocation = BlockPos(5, 108, 43)
     private var currentLivid = Livid.HOCKEY
 
+    private val hud by HUD("Invulnerability Timer", "Shows time remaining on Livid's invulnerability.") { example ->
+        if (!example && (!DungeonUtils.inBoss || !DungeonUtils.isFloor(5) || invulnTime <= 0)) return@HUD 0 to 0
+        val time = if (example) 390 else invulnTime
+        val color = when {
+            time > 260 -> "§a"
+            time > 130 -> "§e"
+            else -> "§c"
+        }
+        textDim("${color}Livid: ${time}t ", 0, 0)
+    }
+
+    private var invulnTime = 0
+    private val lividStartRegex = Regex("^\\[BOSS] Livid: Welcome, you've arrived right on time\\. I am Livid, the Master of Shadows\\.$")
+
     init {
+        on<ChatPacketEvent> {
+            if (!DungeonUtils.inDungeons || !DungeonUtils.isFloor(5)) return@on
+            if (value.matches(lividStartRegex)) invulnTime = 390
+        }
+
         on<BlockUpdateEvent> {
             if (!DungeonUtils.inBoss || !DungeonUtils.isFloor(5) || pos != woolLocation) return@on
             currentLivid = Livid.entries.find { livid -> livid.wool.defaultBlockState() == updated.block.defaultBlockState() } ?: return@on
@@ -45,14 +66,22 @@ object LividSolver : Module(
 
         on<RenderEvent./*? if >=1.21.10 {*//*Extract*//*?} else {*/Last/*?}*/> {
             if (!DungeonUtils.inBoss || !DungeonUtils.isFloor(5)) return@on
-            currentLivid.entity?.let { entity ->
-                /*? if <1.21.10 {*/context./*?}*/drawWireFrameBox(entity.boundingBox, currentLivid.color, 8f, depthCheck)
+            currentLivid.entity?.let {
+                /*? if <1.21.10 {*/context./*?}*/drawWireFrameBox(it.boundingBox, currentLivid.color, 8f, depthCheck)
+                if (tracer) /*? if <1.21.10 {*/context./*?}*/drawTracer(it.position().addVec(y = it.eyeHeight), currentLivid.color, depth = depthCheck)
             }
         }
 
+        on<TickEvent.Server> {
+            if (!DungeonUtils.inBoss || !DungeonUtils.isFloor(5)) return@on
+            if (invulnTime > 0) invulnTime--
+        }
+
+        // TODO: Fix when this changes to WorldEvent.Load in Odin 0.1.3
         on<WorldLoadEvent> {
             currentLivid = Livid.HOCKEY
             currentLivid.entity = null
+            invulnTime = 0
         }
     }
 
