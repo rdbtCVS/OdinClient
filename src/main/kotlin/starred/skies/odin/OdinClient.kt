@@ -19,7 +19,7 @@ import java.net.URI
 object OdinClient : ClientModInitializer {
     private val modulesToRegister: Array<Module> = arrayOf(
         CloseChest, DungeonAbilities, FuckDiorite, SecretHitboxes, BreakerHelper, KeyHighlight, LividSolver, SpiritBear,
-        Highlight, AutoClicker, Gloomlock, EscrowFix, AutoGFS, QueueTerms
+        Highlight, AutoClicker, Gloomlock, EscrowFix, AutoGFS, QueueTerms, AutoTerms, SimonSaysAdditions
     )
 
     private const val MOD_VERSION: String = /*$ mod_version*/ "0.1.2"
