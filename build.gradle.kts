@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -32,7 +34,10 @@ fletchingTable {
 
 dependencies {
     minecraft("com.mojang:minecraft:$mc")
-    mappings(loom.officialMojangMappings())
+    mappings(loom.layered {
+        officialMojangMappings()
+        parchment("parchment".mc(mc))
+    })
 
     modRuntimeOnly(libs.devauth)
 
