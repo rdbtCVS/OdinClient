@@ -16,6 +16,9 @@ fabric-api-1-21-10 = "0.138.3+1.21.10"
 odin-1-21-8 = "0.1.3-1.21.8"
 odin-1-21-10 = "0.1.3-1.21.10"
 
+firmament-1-21-8 = "42.0.0+mc1.21.7"
+firmament-1-21-10 = "42.0.0+mc1.21.10"
+
 parchment-1-21-8 = "2025.09.14"
 parchment-1-21-10 = "2025.10.12"
 
@@ -36,6 +39,9 @@ fabric-api-1-21-10 = { module = "net.fabricmc.fabric-api:fabric-api", version.re
 
 odin-1-21-8 = { module = "maven.modrinth:odin", version.ref = "odin-1-21-8" }
 odin-1-21-10 = { module = "maven.modrinth:odin", version.ref = "odin-1-21-10" }
+
+firmament-1-21-8 = { module = "maven.modrinth:firmament", version.ref = "firmament-1-21-8" }
+firmament-1-21-10 = { module = "maven.modrinth:firmament", version.ref = "firmament-1-21-10" }
 
 parchment-1-21-8 = { module = "org.parchmentmc.data:parchment-1.21.8", version.ref = "parchment-1-21-8" }
 parchment-1-21-10 = { module = "org.parchmentmc.data:parchment-1.21.10", version.ref = "parchment-1-21-10" }

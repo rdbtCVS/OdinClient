@@ -41,6 +41,7 @@ dependencies {
     })
 
     modRuntimeOnly(libs.devauth)
+    modCompileOnly("firmament".mc(mc))
 
     modImplementation("fabric-api".mc(mc))
     modImplementation("odin".mc(mc))
