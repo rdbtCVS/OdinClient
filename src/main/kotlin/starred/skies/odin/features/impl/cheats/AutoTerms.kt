@@ -5,9 +5,8 @@ import com.odtheking.odin.clickgui.settings.impl.NumberSetting
 import com.odtheking.odin.events.*
 import com.odtheking.odin.events.core.on
 import com.odtheking.odin.features.Module
-import com.odtheking.odin.features.impl.floor7.TerminalSimulator
-import com.odtheking.odin.features.impl.floor7.TerminalSolver
-import com.odtheking.odin.features.impl.floor7.terminalhandler.TerminalTypes
+import com.odtheking.odin.utils.skyblock.dungeon.terminals.TerminalTypes
+import com.odtheking.odin.utils.skyblock.dungeon.terminals.TerminalUtils
 import starred.skies.odin.utils.Skit
 
 object AutoTerms : Module(
@@ -25,7 +24,7 @@ object AutoTerms : Module(
 
     init {
         on<GuiEvent.DrawBackground> {
-            with (TerminalSolver.currentTerm ?: return@on) {
+            with (TerminalUtils.currentTerm ?: return@on) {
                 if (firstClick && (System.currentTimeMillis() - lastClickTime < firstClickDelay)) return@on
                 if (System.currentTimeMillis() - lastClickTime < autoDelay) return@on
                 if (System.currentTimeMillis() - lastClickTime > breakThreshold) isClicked = false
@@ -43,7 +42,7 @@ object AutoTerms : Module(
             }
         }
 
-        on<TerminalEvent.Opened> {
+        on<TerminalEvent.Open> {
             lastClickTime = System.currentTimeMillis()
             firstClick = true
         }

@@ -6,10 +6,17 @@ import com.odtheking.odin.events.TerminalEvent
 import com.odtheking.odin.events.core.on
 import com.odtheking.odin.features.Module
 import com.odtheking.odin.features.impl.floor7.TerminalSolver
-import com.odtheking.odin.features.impl.floor7.terminalhandler.TerminalTypes
 import com.odtheking.odin.utils.devMessage
+import com.odtheking.odin.utils.skyblock.dungeon.terminals.TerminalTypes
+import com.odtheking.odin.utils.skyblock.dungeon.terminals.TerminalUtils
+import net.minecraft.network.chat.ClickEvent
+import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.HoverEvent
+import net.minecraft.network.chat.Style
 import starred.skies.odin.events.TerminalUpdateEvent
 import starred.skies.odin.utils.Skit
+import starred.skies.odin.utils.notify
+import java.net.URI
 import java.util.LinkedList
 import java.util.Queue
 
@@ -25,7 +32,7 @@ object QueueTerms : Module(
 
     init {
         on<GuiEvent.CustomTermGuiClick> {
-            with(TerminalSolver.currentTerm ?: return@on) {
+            with(TerminalUtils.currentTerm ?: return@on) {
                 if (
                     type == TerminalTypes.MELODY ||
                     TerminalSolver.renderType != 1 ||
@@ -41,7 +48,7 @@ object QueueTerms : Module(
         }
 
         on<GuiEvent.DrawBackground> {
-            with(TerminalSolver.currentTerm ?: return@on) {
+            with(TerminalUtils.currentTerm ?: return@on) {
                 if (
                     type == TerminalTypes.MELODY ||
                     TerminalSolver.renderType != 1 ||
@@ -59,14 +66,21 @@ object QueueTerms : Module(
         }
 
         on<TerminalUpdateEvent> {
-            with (TerminalSolver.currentTerm ?: return@on) {
+            with (TerminalUtils.currentTerm ?: return@on) {
                 if (TerminalSolver.renderType != 1 || queue.isEmpty()) return@on
                 queue.forEach { simulateClick(it.slot, it.button) }
             }
         }
 
-        on<TerminalEvent.Closed> {
+        on<TerminalEvent.Close> {
             queue.clear()
         }
+    }
+
+    override fun onEnable() {
+        super.onEnable()
+        Component.literal("Queue Terms is slightly buggy in OdinClient, please refer to https://github.com/skies-starred/Nebulune for a better one.")
+            .withStyle(Style.EMPTY.withClickEvent(ClickEvent.OpenUrl(URI("https://github.com/skies-starred/Nebulune"))).withHoverEvent(HoverEvent.ShowText(Component.literal("Click to open link."))))
+            .notify()
     }
 }
