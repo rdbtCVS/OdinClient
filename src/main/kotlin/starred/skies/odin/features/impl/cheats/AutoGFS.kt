@@ -11,6 +11,7 @@ import com.odtheking.odin.utils.itemId
 import com.odtheking.odin.utils.modMessage
 import com.odtheking.odin.utils.sendCommand
 import com.odtheking.odin.utils.skyblock.KuudraUtils
+import com.odtheking.odin.utils.skyblock.LocationUtils
 import com.odtheking.odin.utils.skyblock.dungeon.DungeonUtils
 import com.odtheking.odin.utils.skyblock.dungeon.tiles.RoomType
 import starred.skies.odin.utils.Skit
@@ -20,10 +21,11 @@ object AutoGFS : Module(
     description = "Automatically refills certain items from your sacks.",
     category = Skit.CHEATS
 ) {
-    private val inKuudra by BooleanSetting("In Kuudra", true, desc = "Only gfs in Kuudra.")
-    private val inDungeon by BooleanSetting("In Dungeon", true, desc = "Only gfs in Dungeons.")
+    private val inSkyblock by BooleanSetting("In Skyblock", true, desc = "gfs everywhere in skyblock.")
+    private val inKuudra by BooleanSetting("In Kuudra", true, desc = "Only gfs in Kuudra.").withDependency { !inSkyblock }
+    private val inDungeon by BooleanSetting("In Dungeon", true, desc = "Only gfs in Dungeons.").withDependency { !inSkyblock }
     private val refillOnDungeonStart by BooleanSetting("Refill on Dungeon Start", true, desc = "Refill when a dungeon starts.")
-    private val refillOnTimer by BooleanSetting("Refill on Timer", true, desc = "Refill on a timed interval.")
+    private val refillOnTimer by BooleanSetting("Refill on Timer", false, desc = "Refill on a timed interval.")
     private val timerIncrements by NumberSetting("Timer Increments", 5, 1, 60, 1, desc = "The interval in which to refill.", unit = "s")
         .withDependency { refillOnTimer }
     private val refillPearl by BooleanSetting("Refill Pearl", true, desc = "Refill ender pearls.")
@@ -62,8 +64,10 @@ object AutoGFS : Module(
     }
 
     private fun refill() {
-        if (mc.screen != null || !(inKuudra && KuudraUtils.inKuudra) && !(inDungeon && DungeonUtils.inDungeons)) return
+        if (mc.screen != null) return
         val inventory = mc.player?.inventory ?: return
+        if (inSkyblock && !LocationUtils.isInSkyblock) return
+        if (!inSkyblock && !((inKuudra && KuudraUtils.inKuudra) || (inDungeon && DungeonUtils.inDungeons))) return
 
         inventory.find { it?.itemId == "ENDER_PEARL" }?.takeIf { refillPearl }?.also { fillItemFromSack(16, "ENDER_PEARL", "ender_pearl", false) }
 
