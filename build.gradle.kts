@@ -44,7 +44,7 @@ dependencies {
     modCompileOnly("firmament".mc(mc))
 
     modImplementation("fabric-api".mc(mc))
-    modImplementation("odin".mc(mc))
+    modImplementation("odin-prod".mc(mc))
     modImplementation(libs.fabric.loader)
     modImplementation(libs.fabric.language.kotlin)
     modImplementation(libs.commodore)

@@ -25,7 +25,7 @@ object OdinClient : ClientModInitializer {
     private val commandsToRegister: Array<Commodore> = arrayOf(autoSellCommand)
 
     private val modulesToRegister: Array<Module> = arrayOf(
-        CloseChest, DungeonAbilities, FuckDiorite, SecretHitboxes, BreakerHelper, KeyHighlight, LividSolver, SpiritBear,
+        CloseChest, DungeonAbilities, FuckDiorite, SecretHitboxes, BreakerHelper, KeyHighlight, LividSolver, SpiritBear, TriggerBot,
         Highlight, AutoClicker, Gloomlock, EscrowFix, AutoGFS, QueueTerms, AutoTerms, Trajectories, AutoSell, SimonSays, InventoryWalk
     )
 
@@ -34,7 +34,7 @@ object OdinClient : ClientModInitializer {
     private var lastInstall: String by mainFile.string("lastInstall")
     private var send: Boolean = true
 
-    const val MOD_VERSION: String = /*$ mod_version*/ "0.1.4-r0"
+    const val MOD_VERSION: String = /*$ mod_version*/ "0.1.4-r1"
     val moduleConfig: ModuleConfig = ModuleConfig("odinClient")
     val joinListeners = mutableListOf<() -> Unit>()
 

@@ -13,7 +13,8 @@ fabric-language-kotlin = "1.13.8+kotlin.2.3.0"
 fabric-api-1-21-8 = "0.136.1+1.21.8"
 fabric-api-1-21-10 = "0.138.3+1.21.10"
 
-odin-1-21-10 = "e2cf40d9aa"
+odin-act-1-21-10 = "e2cf40d9aa"
+odin-prod-1-21-10 = "83gaYoBl"
 
 firmament-1-21-8 = "42.0.0+mc1.21.7"
 firmament-1-21-10 = "42.0.0+mc1.21.10"
@@ -36,7 +37,8 @@ commodore = { module = "com.github.stivais:Commodore", version.ref = "commodore"
 fabric-api-1-21-8 = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api-1-21-8" }
 fabric-api-1-21-10 = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api-1-21-10" }
 
-odin-1-21-10 = { module = "com.github.odtheking:odinfabric", version.ref = "odin-1-21-10" }
+odin-act-1-21-10 = { module = "maven.modrinth:odin", version.ref = "odin-act-1-21-10" }
+odin-prod-1-21-10 = { module = "maven.modrinth:odin", version.ref = "odin-prod-1-21-10" }
 
 firmament-1-21-10 = { module = "maven.modrinth:firmament", version.ref = "firmament-1-21-10" }
 
